@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>King Spin</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="spin">
+  <div class="page-shell">
+    <header class="hero-card hero-overlay">
+      <img src="logo.png" alt="King Spin logo" class="hero-logo" />
+      <div class="hero-copy">
+        <h1>King Spin</h1>
+        <p>Blackjack reward wheel</p>
+      </div>
+    </header>
+
+    <nav class="top-nav">
+      <a href="index.html" class="active">Spin Wheel</a>
+      <a href="admin.html">Prize Setup</a>
+      <a href="audit.html">Audit Log</a>
+    </nav>
+
+    <main class="grid-main">
+      <section class="panel form-panel">
+        <h2>Spin Details</h2>
+        <label for="patronName">Patron name</label>
+        <input id="patronName" type="text" placeholder="Enter patron name" maxlength="80" />
+
+        <label for="wheelType">Winning result</label>
+        <select id="wheelType">
+          <option value="singleKing">Blackjack with 1 King</option>
+          <option value="doubleKing">Blackjack with 2 Kings</option>
+        </select>
+
+        <div class="summary-box">
+          <div>
+            <span class="summary-label">Selected wheel</span>
+            <strong id="selectedWheelLabel">Blackjack with 1 King</strong>
+          </div>
+          <div>
+            <span class="summary-label">Prizes configured</span>
+            <strong id="prizeCount">0</strong>
+          </div>
+        </div>
+
+        <button id="spinButton" class="primary-btn">Start Wheel</button>
+        <p class="hint">Enter the patron name, start the wheel, then click stop to land on the selected prize.</p>
+      </section>
+
+      <section class="panel wheel-panel">
+        <div id="winnerBanner" class="winner-banner" aria-live="polite">Ready to spin</div>
+        <div class="wheel-stage">
+          <div class="pointer"></div>
+          <canvas id="wheelCanvas" width="720" height="720" aria-label="Prize wheel"></canvas>
+        </div>
+        <div class="result-card">
+          <span class="result-label">Winning Prize</span>
+          <h3 id="resultText">Ready to spin</h3>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

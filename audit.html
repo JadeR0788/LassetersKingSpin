@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>King Spin - Audit Log</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="audit">
+  <div class="page-shell">
+    <header class="hero-card compact hero-overlay">
+      <img src="logo.png" alt="King Spin logo" class="hero-logo small" />
+      <div class="hero-copy">
+        <h1>Audit Log</h1>
+        <p>Spin history by date, time, wheel, patron and prize</p>
+      </div>
+    </header>
+
+    <nav class="top-nav">
+      <a href="index.html">Spin Wheel</a>
+      <a href="admin.html">Prize Setup</a>
+      <a href="audit.html" class="active">Audit Log</a>
+    </nav>
+
+    <section class="panel audit-panel">
+      <div class="panel-head audit-actions">
+        <h2>Recorded Spins</h2>
+        <div class="button-row">
+          <button class="secondary-btn" id="exportAudit">Export CSV</button>
+          <button class="danger-btn" id="clearAudit">Clear Log</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Wheel</th>
+              <th>Patron</th>
+              <th>Prize</th>
+            </tr>
+          </thead>
+          <tbody id="auditTableBody"></tbody>
+        </table>
+      </div>
+      <p id="auditEmpty" class="hint"></p>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

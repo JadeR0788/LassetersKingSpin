@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>King Spin - Prize Setup</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="admin">
+  <div class="page-shell">
+    <header class="hero-card compact hero-overlay">
+      <img src="logo.png" alt="King Spin logo" class="hero-logo small" />
+      <div class="hero-copy">
+        <h1>Prize Setup</h1>
+        <p>Update wheel prizes and odds for future promotions</p>
+      </div>
+    </header>
+
+    <nav class="top-nav">
+      <a href="index.html">Spin Wheel</a>
+      <a href="admin.html" class="active">Prize Setup</a>
+      <a href="audit.html">Audit Log</a>
+    </nav>
+
+    <main class="admin-grid">
+      <section class="panel admin-panel">
+        <div class="panel-head">
+          <h2>Blackjack with 1 King</h2>
+          <button class="secondary-btn" id="addSinglePrize">Add Prize</button>
+        </div>
+        <div id="singleKingList" class="prize-list"></div>
+      </section>
+
+      <section class="panel admin-panel">
+        <div class="panel-head">
+          <h2>Blackjack with 2 Kings</h2>
+          <button class="secondary-btn" id="addDoublePrize">Add Prize</button>
+        </div>
+        <div id="doubleKingList" class="prize-list"></div>
+      </section>
+    </main>
+
+    <section class="panel save-panel">
+      <div class="save-actions">
+        <button class="primary-btn" id="saveConfig">Save Prize Setup</button>
+        <button class="secondary-btn" id="resetDefaults">Reset to Default Prizes</button>
+      </div>
+      <p class="hint">Weights can be any number. Higher numbers mean a greater chance of landing on that prize.</p>
+      <p id="saveMessage" class="save-message"></p>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
