@@ -23,8 +23,48 @@ const DEFAULT_CONFIG = {
 
 const WHEEL_LABELS = {
   singleKing: 'Blackjack with 1 King',
-  doubleKing: 'Blackjack with 2 Kings'
+  doubleKing: 'Win with 2 Kings'
 };
+
+const WHEEL_CARD_IMAGES = {
+  singleKing: 'cards-king-ace.png',
+  doubleKing: 'cards-two-kings.png'
+};
+
+const wheelImageCache = {};
+
+function preloadWheelImages(onLoad) {
+  Object.entries(WHEEL_CARD_IMAGES).forEach(([type, src]) => {
+    const image = new Image();
+    image.onload = () => {
+      wheelImageCache[type] = image;
+      if (typeof onLoad === 'function') onLoad();
+    };
+    image.src = src;
+  });
+}
+
+function drawWheelCardImage(ctx, cx, cy, radius, wheelType) {
+  const image = wheelImageCache[wheelType];
+  if (!image) return;
+
+  // Cards are intentionally drawn BEFORE the wheel face so they sit behind the wheel,
+  // with only the top of the cards showing like the promotion artwork.
+  const maxWidth = radius * 1.16;
+  const scale = Math.min(maxWidth / image.width, (radius * 0.68) / image.height);
+  const width = image.width * scale;
+  const height = image.height * scale;
+  const x = cx - width / 2;
+  const y = cy - radius - 2;
+
+  ctx.save();
+  ctx.globalAlpha = 0.98;
+  ctx.shadowColor = 'rgba(0, 0, 0, 0.50)';
+  ctx.shadowBlur = 20;
+  ctx.shadowOffsetY = 12;
+  ctx.drawImage(image, x, y, width, height);
+  ctx.restore();
+}
 
 function getConfig() {
   try {
@@ -149,7 +189,7 @@ function wrapTextOnWheel(ctx, text, x, y, maxWidth, lineHeight) {
   });
 }
 
-function drawWheel(canvas, items, rotation = 0) {
+function drawWheel(canvas, items, rotation = 0, wheelType = null) {
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
   const { width, height } = canvas;
@@ -176,6 +216,8 @@ function drawWheel(canvas, items, rotation = 0) {
   // softer premium palette: burgundy, plum, espresso, copper
   const palette = ['#5a1519', '#3b1926', '#4a1e16', '#611f38', '#2c1a17', '#7a4b1e'];
   let start = -Math.PI / 2 + rotation;
+
+  drawWheelCardImage(ctx, cx, cy, radius, wheelType);
 
   const wheelShadow = ctx.createRadialGradient(cx, cy + radius * 0.18, radius * 0.2, cx, cy, radius * 1.18);
   wheelShadow.addColorStop(0, 'rgba(0,0,0,0.05)');
@@ -356,7 +398,7 @@ function initSpinPage() {
     const type = wheelType.value;
     selectedWheelLabel.textContent = WHEEL_LABELS[type];
     prizeCount.textContent = config[type].filter(item => item.label && Number(item.weight) > 0).length;
-    drawWheel(canvas, config[type], currentRotation);
+    drawWheel(canvas, config[type], currentRotation, type);
   }
 
   function setBanner(text, pulse = false) {
@@ -387,7 +429,7 @@ function initSpinPage() {
       const dt = Math.min((ts - freeSpinLastTs) / 1000, 0.05);
       freeSpinLastTs = ts;
       currentRotation += spinVelocity * dt;
-      drawWheel(canvas, getConfig()[wheelType.value], currentRotation);
+      drawWheel(canvas, getConfig()[wheelType.value], currentRotation, wheelType.value);
       freeSpinRAF = requestAnimationFrame(tick);
     };
 
@@ -441,13 +483,13 @@ function initSpinPage() {
       const progress = Math.min(elapsed / duration, 1);
       const eased = 1 - Math.pow(1 - progress, 4);
       currentRotation = initialRotation + (finalRotation - initialRotation) * eased;
-      drawWheel(canvas, items, currentRotation);
+      drawWheel(canvas, items, currentRotation, type);
 
       if (progress < 1) {
         requestAnimationFrame(animate);
       } else {
         currentRotation = finalRotation;
-        drawWheel(canvas, items, currentRotation);
+        drawWheel(canvas, items, currentRotation, type);
         resultText.textContent = winner.label;
         setBanner(winner.label, true);
 
@@ -495,6 +537,7 @@ function initSpinPage() {
     }
   });
 
+  preloadWheelImages(refreshWheel);
   setBanner('Ready to spin');
   refreshWheel();
 }
